@@ -1,0 +1,44 @@
+:root {
+  /* LIGHT CSS VARIABLES */
+  --bg-light: #f6f7fb;
+  --bg-card-light: #fff;
+  --bg-button-light: #000;
+  --text-color-light: #000;
+  --button-text-color-light: #ffffff;
+  /* DARK CSS VARIABLES */
+  --bg-dark: #0a092d;
+  --bg-card-dark: #2e3856;
+  --bg-button-dark: #586380;
+  --bg-button-secondary-dark: #000;
+  --text-color-dark: #ffffff;
+  --button-text-color-dark: #ffffff;
+}
+
+[data-theme="dark"] {
+	--bg-color: var(--bg-dark);
+  --bg-card: var(--bg-card-dark);
+	--text-color: var(--text-color-dark);
+  --bg-button: var(--bg-button-dark);
+  --button-text-color: var(--button-text-color-dark);
+}
+
+[data-theme="light"] {
+	--bg-color: var(--bg-light);
+  --bg-card: var(--bg-card-light);
+	--text-color: var(--text-color-light);
+  --bg-button: var(--bg-button-light);
+  --button-text-color: var(--button-text-color-light);
+}
+
+body {
+  min-height: 90vh;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 0;
+}
+
+.app {
+  max-width: 100%;
+  margin: 0;
+  padding: 10px;
+}
