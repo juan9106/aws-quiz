@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {  BrowserRouter, Route, Routes } from 'react-router-dom';
+import { HashRouter, Route, Routes } from 'react-router-dom';
 
 import { ThemeContextProvider } from './context/ThemeContext';
 import HomePage from './pages/HomePage';
@@ -29,7 +29,7 @@ export const App = () => {
     
   return (
     <ThemeContextProvider>
-      <BrowserRouter basename='/'>
+      <HashRouter basename='/'>
         <div className="app">
           <TopBar />
           <Routes>
@@ -44,7 +44,7 @@ export const App = () => {
               } />
           </Routes>
         </div>
-      </BrowserRouter>
+      </HashRouter>
     </ThemeContextProvider>
   )
 }
