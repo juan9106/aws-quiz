@@ -1,44 +1,57 @@
 :root {
-  /* LIGHT CSS VARIABLES */
-  --bg-light: #f6f7fb;
-  --bg-card-light: #fff;
-  --bg-button-light: #000;
-  --text-color-light: #000;
-  --button-text-color-light: #ffffff;
-  /* DARK CSS VARIABLES */
-  --bg-dark: #0a092d;
-  --bg-card-dark: #2e3856;
-  --bg-button-dark: #586380;
-  --bg-button-secondary-dark: #000;
-  --text-color-dark: #ffffff;
-  --button-text-color-dark: #ffffff;
+  font-family: Arial, sans-serif;
+  color-scheme: dark;
+  --bg-color: #0a092d;
+  --bg-card: #2e3856;
+  --text-color: #fff;
+  --bg-button: #586380;
+  --button-text-color: #fff;
 }
-
 [data-theme="dark"] {
-	--bg-color: var(--bg-dark);
-  --bg-card: var(--bg-card-dark);
-	--text-color: var(--text-color-dark);
-  --bg-button: var(--bg-button-dark);
-  --button-text-color: var(--button-text-color-dark);
+  color-scheme: dark;
 }
-
 [data-theme="light"] {
-	--bg-color: var(--bg-light);
-  --bg-card: var(--bg-card-light);
-	--text-color: var(--text-color-light);
-  --bg-button: var(--bg-button-light);
-  --button-text-color: var(--button-text-color-light);
+  color-scheme: light;
+  --bg-color: #f6f7fb;
+  --bg-card: #fff;
+  --text-color: #111;
+  --bg-button: #17233b;
+  --button-text-color: #fff;
 }
-
+* {
+  box-sizing: border-box;
+}
 body {
-  min-height: 90vh;
-  background-color: var(--bg-color);
+  margin: 0;
+  min-width: 280px;
+  min-height: 100vh;
+  background: var(--bg-color);
   color: var(--text-color);
-  margin: 0;
+  line-height: 1.5;
 }
-
-.app {
-  max-width: 100%;
-  margin: 0;
-  padding: 10px;
+button,
+input {
+  font: inherit;
+}
+button {
+  background: var(--bg-button);
+  color: var(--button-text-color);
+  border: 0;
+  border-radius: 6px;
+  padding: 12px 18px;
+  cursor: pointer;
+  min-height: 44px;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+:focus-visible {
+  outline: 3px solid #d78b00;
+  outline-offset: 4px;
+}
+h1,
+h2,
+p {
+  margin-top: 0;
 }

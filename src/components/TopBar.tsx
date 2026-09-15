@@ -1,13 +1,12 @@
-import React from 'react'
-import { ThemeToggle } from './ThemeToggle';
+import React from "react";
+import { ThemeToggle } from "./ThemeToggle";
 
-import './TopBar.css';
+import "./TopBar.css";
 
 export const TopBar: React.FC = () => {
-
-    return (
-        <div className="topbar-container">
-            <ThemeToggle />
-        </div>
-    )
-}
+  return (
+    <div className="topbar-container">
+      <ThemeToggle />
+    </div>
+  );
+};

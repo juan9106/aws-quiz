@@ -1,50 +1,30 @@
-# React + TypeScript + Vite
+# AWS Quiz
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A small React + TypeScript quiz with 46 AWS questions loaded from a validated JSON bank. Runs entirely in the browser.
 
-Currently, two official plugins are available:
+## Development
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Use Node.js 24 LTS and pnpm 10.8.1 (pinned in packageManager).
 
-## Expanding the ESLint configuration
+- pnpm install --frozen-lockfile
+- pnpm dev
+- pnpm lint
+- pnpm test
+- pnpm build
+- pnpm preview
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+The app is served under /aws-quiz/ and uses hash routing for GitHub Pages.
 
-- Configure the top-level `parserOptions` property like this:
+## Quiz rules
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+Choose 1–10 questions, with 120 seconds per question. Questions are shuffled without modifying the bank. Skipped questions score zero. Each question is worth one point: multiple-answer questions receive partial credit for correct selections, but any incorrect selection makes that question worth zero. Results round the overall percentage to a whole number.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+The timer uses a deadline and stops when the attempt ends. Try again clears the attempt. Reloading starts over; only the color theme is saved locally.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## Questions
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+Edit src/data/questions.json. Each entry has a unique positive integer number, a nonempty question, unique options and answers, and type single option or multi option. Correct answers must appear in options; single questions require one answer and multiple questions at least two. Invalid banks show a load error. Run the tests after editing. Academic accuracy of the question content must be reviewed separately.
+
+## Deployment
+
+pnpm deploy builds first and then publishes dist using gh-pages. GitHub repository access is required. The configured base path is /aws-quiz/; change it if the repository name changes. Building or testing does not publish the site.

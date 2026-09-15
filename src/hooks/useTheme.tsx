@@ -1,17 +1,7 @@
 import { useContext } from "react";
-import { Theme, ThemeContext } from "../context/ThemeContext";
-
-export const useTheme = () => {
-    const { theme, setTheme } = useContext(ThemeContext);
-
-    const toggleTheme = (selectedTheme: Theme = theme === 'light' ? 'dark' : 'light') => {
-        setTheme(selectedTheme);
-        document.documentElement.setAttribute('data-theme', selectedTheme);
-        localStorage.setItem('theme-mode', selectedTheme);
-    };
-
-    return {
-        toggleTheme: toggleTheme,
-        theme: theme,
-    }
+import { ThemeContext } from "../context/theme";
+export function useTheme() {
+  const context = useContext(ThemeContext);
+  if (!context) throw new Error("useTheme requires ThemeContextProvider");
+  return context;
 }

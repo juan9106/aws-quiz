@@ -1,104 +1,85 @@
-import React, { Dispatch, SetStateAction } from 'react';
-import { IQuestion, UserAnswer } from '../types';
-
-type QuestionCardProps = {
-    currentQuestion: IQuestion,
-    currentQuestionIndex: number,
-    totalQuestions: number,
-    answeredQuestions: UserAnswer[],
-    setAnsweredQuestions?: Dispatch<SetStateAction<UserAnswer[]>>,
-    handleNext?: () => void,
-    handlePrevious?: () => void,
-    isReviewMode?: boolean, // Propiedad para el modo de revisión
-}
-
-const QuestionCard: React.FC<QuestionCardProps> = ({
-  currentQuestion,
-  currentQuestionIndex,
-  totalQuestions,
-  answeredQuestions,
-  setAnsweredQuestions,
-  handlePrevious,
-  handleNext,
-  isReviewMode = false
-}) => {
-    const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (isReviewMode) return; // No permitir cambios en el modo de revisión
-
-        const userAnswers = [...answeredQuestions];
-        const answer = e.target.value;
-
-        if (!userAnswers[currentQuestionIndex]) {
-            userAnswers[currentQuestionIndex] = { number: currentQuestion.number, answers: [] };
-        }
-
-        const currentAnswers = userAnswers[currentQuestionIndex];
-        let updatedAnswers = [...currentAnswers.answers];
-
-        if (!e.target.checked) {
-            updatedAnswers = updatedAnswers.filter(a => a !== answer);
-            updateAnswers(userAnswers, updatedAnswers);
-            return;
-        }
-
-        if (currentQuestion.type === 'single option') {
-            updatedAnswers = [answer];
-        } else {
-            if (!updatedAnswers.includes(answer)) {
-                updatedAnswers.push(answer);
-            }
-        }
-
-        updateAnswers(userAnswers, updatedAnswers);
-    };
-
-    const updateAnswers = (userAnswers: UserAnswer[], updatedAnswers: string[]) => {
-        const newAnswers = { ...userAnswers[currentQuestionIndex], answers: updatedAnswers };
-      
-        setAnsweredQuestions?.([
-          ...userAnswers.slice(0, currentQuestionIndex),
-          newAnswers,
-          ...userAnswers.slice(currentQuestionIndex + 1),
-        ]);
-    };
-    
-    return (
-        <div className="card questions">
-            <h3>Question {currentQuestionIndex + 1} of {totalQuestions}</h3>
-            <p>{currentQuestion.question}</p>
-            {currentQuestion.options.map((option, index) => {
-
-                const isCorrect = currentQuestion.answers.includes(option);
-                const isSelected = answeredQuestions[currentQuestionIndex]?.answers.includes(option) || false;
-                const optionClass = isReviewMode ? (isCorrect ? 'correct' : isSelected ? 'incorrect' : '') : '';
-
-                return (
-                    <div key={index} className={optionClass}>
-                        <input
-                            checked={isSelected}
-                            type={currentQuestion.type === 'single option' ? 'radio' : 'checkbox'}
-                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleAnswerChange(e)}
-                            name={`question-${currentQuestion.number}`}
-                            id={`option-${index}`}
-                            value={option}
-                            disabled={isReviewMode}
-                        />
-                        <label htmlFor={`option-${index}`}>{option}</label>
-                    </div>
-                );
-            })}
-            {!isReviewMode && (
-                <div className='buttons-container'>
-                    <button onClick={handlePrevious} disabled={currentQuestionIndex === 0}>
-                        Back
-                    </button>
-                    <button onClick={handleNext}>
-                        {currentQuestionIndex === totalQuestions - 1 ? 'Finish' : 'Next'}
-                    </button>
-                </div>
-            )}
-        </div>
-    );
+import type { IQuestion } from "../types";
+type Props = {
+  question: IQuestion;
+  index: number;
+  total: number;
+  selected: string[];
+  onAnswer?: (answers: string[]) => void;
+  review?: boolean;
 };
-
-export default QuestionCard;
+export default function QuestionCard({
+  question,
+  index,
+  total,
+  selected,
+  onAnswer,
+  review = false,
+}: Props) {
+  return (
+    <section className="card questions">
+      <h2>
+        Question {index + 1} of {total}
+      </h2>
+      <fieldset>
+        <legend>{question.question}</legend>
+        {question.type === "multi option" && (
+          <p>
+            Select all that apply. Partial credit is awarded only when no
+            incorrect options are selected.
+          </p>
+        )}
+        {review && selected.length === 0 && <p>Not answered</p>}
+        {question.options.map((option, i) => {
+          const correct = question.answers.includes(option),
+            checked = selected.includes(option),
+            id = "question-" + question.number + "-option-" + i;
+          return (
+            <div
+              key={option}
+              className={
+                "option " +
+                (review
+                  ? correct
+                    ? "correct"
+                    : checked
+                      ? "incorrect"
+                      : ""
+                  : "")
+              }
+            >
+              <input
+                id={id}
+                name={"question-" + question.number}
+                type={question.type === "single option" ? "radio" : "checkbox"}
+                checked={checked}
+                disabled={review}
+                onChange={(e) =>
+                  onAnswer?.(
+                    question.type === "single option"
+                      ? [option]
+                      : e.target.checked
+                        ? [...selected, option]
+                        : selected.filter((a) => a !== option),
+                  )
+                }
+              />
+              <label htmlFor={id}>
+                {option}
+                {review && (
+                  <span className="answer-status">
+                    {correct
+                      ? " — Correct answer"
+                      : checked
+                        ? " — Incorrect answer"
+                        : ""}
+                    {checked ? " (Your selection)" : ""}
+                  </span>
+                )}
+              </label>
+            </div>
+          );
+        })}
+      </fieldset>
+    </section>
+  );
+}
